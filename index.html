@@ -20,6 +20,14 @@
       min-height: 100vh;
     }
     
+    /* Mobile: Use smaller, repeating background */
+    @media (max-width: 600px) {
+      body {
+        background-size: 200px auto;
+        background-repeat: repeat;
+      }
+    }
+    
     body::before {
       content: "";
       position: fixed;
@@ -28,7 +36,7 @@
       z-index: -1;
     }
     
-    /* Header with subtle flicker */
+    /* Header with subtle flicker on desktop and aggressive mobile animation */
     .b4nk-header {
       font-size: 36px;
       color: #00ffff;
@@ -40,16 +48,23 @@
       text-transform: uppercase;
     }
     
-    @media (max-width: 600px) {
-      .b4nk-header {
-        font-size: 28px;
-        text-shadow: 0 0 4px #00ffff99, 0 0 6px #ff00ff99;
-      }
-    }
-    
     @keyframes flickerHeader {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.8; }
+    }
+    
+    /* Aggressive mobile header animation */
+    @media (max-width: 600px) {
+      .b4nk-header {
+        font-size: 28px;
+        animation: flickerHeaderMobile 1s infinite;
+      }
+      
+      @keyframes flickerHeaderMobile {
+        0% { opacity: 1; transform: translateX(0); }
+        50% { opacity: 0.4; transform: translateX(-10px); }
+        100% { opacity: 1; transform: translateX(0); }
+      }
     }
     
     /* Grid container */
@@ -61,17 +76,18 @@
       max-width: 1000px;
     }
     
-    /* Card styles – increased opacity & flicker animation */
+    /* Card styles with increased opacity */
     .card {
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid #00ffff55;
       border-radius: 16px;
       padding: 16px;
       text-align: center;
-      animation: cardFlicker 2s infinite;
       transition: transform 0.2s ease, filter 0.2s ease;
+      animation: cardFlicker 2s infinite;
     }
     
+    /* Alternating card background for depth */
     .card:nth-child(even) {
       background: rgba(0, 0, 0, 0.75);
       border-color: #ff00ff55;
@@ -82,6 +98,7 @@
       filter: brightness(1.15);
     }
     
+    /* Flicker animation for cards (desktop) */
     @keyframes cardFlicker {
       0% { opacity: 0.9; }
       20% { opacity: 1; }
@@ -91,6 +108,20 @@
       100% { opacity: 0.9; }
     }
     
+    /* Aggressive mobile card animation */
+    @media (max-width: 600px) {
+      .card {
+        animation: cardFlickerMobile 1s infinite;
+      }
+      
+      @keyframes cardFlickerMobile {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(0.9); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+    }
+    
+    /* Player number styling */
     .player-number {
       font-size: 20px;
       font-weight: bold;
@@ -105,6 +136,7 @@
       }
     }
     
+    /* Card count styling */
     .card-count {
       margin-top: 8px;
       font-size: 16px;
@@ -118,6 +150,7 @@
       }
     }
     
+    /* FadeIn animation (unchanged) */
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
