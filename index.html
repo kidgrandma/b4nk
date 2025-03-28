@@ -15,10 +15,9 @@
       font-family: 'Bebas Neue', sans-serif;
       color: #ffffff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       padding: 20px;
-      flex-wrap: wrap;
       min-height: 100vh;
     }
 
@@ -29,7 +28,31 @@
       background: rgba(0, 0, 0, 0.6);
       z-index: -1;
     }
-<h1 class="b4nk-header">WELCOME 2 DA B4NK</h1>
+
+    .b4nk-header {
+      font-size: 36px;
+      color: #00ffff;
+      text-shadow: 
+        0 0 5px #00ffff,
+        0 0 10px #00ffff,
+        0 0 20px #ff00ff,
+        0 0 40px #ff00ff;
+      text-align: center;
+      margin-bottom: 30px;
+      animation: flicker 3s infinite;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      45% { opacity: 0.9; }
+      50% { opacity: 0.4; }
+      55% { opacity: 0.9; }
+      60% { opacity: 0.6; }
+      65% { opacity: 1; }
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -68,40 +91,16 @@
       color: #ffffff;
       text-shadow: 0 0 4px #ffffff55;
     }
-    .b4nk-header {
-  font-size: 36px;
-  color: #00ffff;
-  text-shadow: 
-    0 0 5px #00ffff,
-    0 0 10px #00ffff,
-    0 0 20px #ff00ff,
-    0 0 40px #ff00ff;
-  text-align: center;
-  width: 100%;
-  margin-bottom: 30px;
-  animation: flicker 3s infinite;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  45% { opacity: 0.9; }
-  50% { opacity: 0.4; }
-  55% { opacity: 0.9
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     @media (max-width: 600px) {
+      .b4nk-header {
+        font-size: 28px;
+      }
       .player-number {
         font-size: 18px;
       }
@@ -115,18 +114,17 @@
   </style>
 </head>
 <body>
+  <h1 class="b4nk-header">WELCOME 2 DA B4NK</h1>
   <div class="grid" id="cardGrid"></div>
 
   <script>
     async function loadData() {
-      const response = await fetch(
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv"
-      );
+      const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv");
       const csvText = await response.text();
       const rows = csvText.trim().split("\n").slice(1); // skip header
 
       const grid = document.getElementById("cardGrid");
-      rows.forEach((row) => {
+      rows.forEach(row => {
         const columns = row.split(",");
         const number = columns[1];
         const cards = columns[2];
