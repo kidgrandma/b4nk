@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>B4NK</title>
+  <title>B4NK // Player Tracker</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
 
@@ -36,10 +36,10 @@
         0 0 5px #00ffff,
         0 0 10px #00ffff,
         0 0 20px #ff00ff,
-        0 0 40px #ff00ff;
+        0 0 30px #ff00ff;
       text-align: center;
       margin-bottom: 30px;
-      animation: flicker 3s infinite;
+      animation: flicker 2s infinite;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
@@ -47,7 +47,7 @@
     @media (max-width: 600px) {
       .b4nk-header {
         font-size: 28px;
-        text-shadow: 0 0 4px #00ffff66;
+        text-shadow: 0 0 4px #00ffff99, 0 0 6px #ff00ff88;
       }
     }
 
@@ -74,7 +74,7 @@
       border-radius: 16px;
       padding: 16px;
       text-align: center;
-      animation: fadeIn 0.5s ease-in, pulse 4s infinite;
+      animation: fadeIn 0.6s ease-in-out, pulse 3s infinite ease-in-out;
       transition: transform 0.2s ease, filter 0.2s ease;
     }
 
@@ -85,14 +85,14 @@
 
     .card:active {
       transform: scale(0.97);
-      filter: brightness(1.2);
+      filter: brightness(1.15);
     }
 
     .player-number {
       font-size: 20px;
       font-weight: bold;
       color: #00ffff;
-      text-shadow: 0 0 4px #00ffff, 0 0 8px #00ffff88;
+      text-shadow: 0 0 3px #00ffff, 0 0 6px #00ffff99;
     }
 
     .card-count {
@@ -102,29 +102,39 @@
       text-shadow: 0 0 4px #ffffff55;
     }
 
+    @media (max-width: 600px) {
+      .player-number {
+        font-size: 18px;
+        text-shadow: 0 0 2px #00ffff88;
+      }
+      .card-count {
+        font-size: 14px;
+      }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
 
     @keyframes pulse {
-      0%   { box-shadow: 0 0 12px rgba(0, 255, 255, 0.2); }
-      50%  { box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
-      100% { box-shadow: 0 0 12px rgba(0, 255, 255, 0.2); }
+      0%   { box-shadow: 0 0 8px rgba(0, 255, 255, 0.2); }
+      50%  { box-shadow: 0 0 14px rgba(255, 0, 255, 0.4); }
+      100% { box-shadow: 0 0 8px rgba(0, 255, 255, 0.2); }
     }
   </style>
 </head>
 <body>
-  <h1 class="b4nk-header">💿🔌B4NK💿🔌</h1>
+  <h1 class="b4nk-header">💿🔌B4NK🔌💿</h1>
   <div class="grid" id="cardGrid"></div>
 
   <script>
     async function loadData() {
       const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv");
       const csvText = await response.text();
-      const rows = csvText.trim().split("\n").slice(1); // skip header
+      const rows = csvText.trim().split("\n").slice(1);
 
-      // Sort by total card count, descending
+      // Sort by card count, descending
       rows.sort((a, b) => {
         const cardsA = parseInt(a.split(",")[2]);
         const cardsB = parseInt(b.split(",")[2]);
