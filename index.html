@@ -29,7 +29,7 @@
       background: rgba(0, 0, 0, 0.6);
       z-index: -1;
     }
-
+<h1 class="b4nk-header">WELCOME 2 DA B4NK</h1>
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -68,6 +68,27 @@
       color: #ffffff;
       text-shadow: 0 0 4px #ffffff55;
     }
+    .b4nk-header {
+  font-size: 36px;
+  color: #00ffff;
+  text-shadow: 
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 30px;
+  animation: flicker 3s infinite;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.9; }
+  50% { opacity: 0.4; }
+  55% { opacity: 0.9
 
     @keyframes fadeIn {
       from {
