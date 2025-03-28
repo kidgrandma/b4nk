@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Player Card Tracker</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #ffffff;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      flex-wrap: wrap;
+    }
 
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,255,255,0.15);
+    }
+
+    .player-number {
+      font-size: 20px;
+      font-weight: bold;
+      color: #00ffff;
+    }
+
+    .card-count {
+      margin-top: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid" id="cardGrid"></div>
+
+<script>
+  async function loadData() {
+    const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv");
+    const csvText = await response.text();
+    const rows = csvText.trim().split("\n").slice(1); // skip header
+
+    const grid = document.getElementById("cardGrid");
+    rows.forEach(row => {
+      const columns = row.split(",");
+      const number = columns[1];
+      const cards = columns[2];
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const playerNumber = document.createElement("div");
+      playerNumber.className = "player-number";
+      playerNumber.textContent = `Player ${number.trim()}`;
+
+      const cardCount = document.createElement("div");
+      cardCount.className = "card-count";
+      cardCount.textContent = `${cards.trim()} cards`;
+
+      card.appendChild(playerNumber);
+      card.appendChild(cardCount);
+      grid.appendChild(card);
+    });
+  }
+
+  loadData();
+</script>
+</body>
+</html>
