@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>B4NK</title>
+  <title>B4NK // Player Tracker</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    /* Global body styles with a subtle flicker */
     body {
       margin: 0;
       background: url('images/b4nk.jpg') no-repeat center center fixed;
@@ -19,15 +18,17 @@
       align-items: center;
       padding: 20px;
       min-height: 100vh;
-      animation: globalFlicker 5s infinite;
     }
     
-    @keyframes globalFlicker {
-      0%, 100% { opacity: 0.98; }
-      50% { opacity: 1; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
     }
     
-    /* Header styles */
+    /* Header with subtle flicker */
     .b4nk-header {
       font-size: 36px;
       color: #00ffff;
@@ -39,16 +40,16 @@
       text-transform: uppercase;
     }
     
-    @keyframes flickerHeader {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.8; }
-    }
-    
     @media (max-width: 600px) {
       .b4nk-header {
         font-size: 28px;
         text-shadow: 0 0 4px #00ffff99, 0 0 6px #ff00ff99;
       }
+    }
+    
+    @keyframes flickerHeader {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
     }
     
     /* Grid container */
@@ -60,19 +61,19 @@
       max-width: 1000px;
     }
     
-    /* Card styles with less opaque background so the underlying image shows more */
+    /* Card styles – increased opacity & flicker animation */
     .card {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.8);
       border: 1px solid #00ffff55;
       border-radius: 16px;
       padding: 16px;
       text-align: center;
-      animation: cardFlicker 3s infinite;
+      animation: cardFlicker 2s infinite;
       transition: transform 0.2s ease, filter 0.2s ease;
     }
     
     .card:nth-child(even) {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.75);
       border-color: #ff00ff55;
     }
     
@@ -82,12 +83,14 @@
     }
     
     @keyframes cardFlicker {
-      0% { opacity: 0.95; }
-      50% { opacity: 1; }
-      100% { opacity: 0.95; }
+      0% { opacity: 0.9; }
+      20% { opacity: 1; }
+      40% { opacity: 0.8; }
+      60% { opacity: 1; }
+      80% { opacity: 0.85; }
+      100% { opacity: 0.9; }
     }
     
-    /* Player number (no extra glow on mobile) */
     .player-number {
       font-size: 20px;
       font-weight: bold;
@@ -102,7 +105,6 @@
       }
     }
     
-    /* Card count styling */
     .card-count {
       margin-top: 8px;
       font-size: 16px;
@@ -115,18 +117,22 @@
         font-size: 14px;
       }
     }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
-  <h1 class="b4nk-header">💿🔌B4NK🔌💿
-</h1>
+  <h1 class="b4nk-header">WELCOME 2 DA B4NK</h1>
   <div class="grid" id="cardGrid"></div>
   
   <script>
     async function loadData() {
       const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv");
       const csvText = await response.text();
-      const rows = csvText.trim().split("\n").slice(1); // skip header row
+      const rows = csvText.trim().split("\n").slice(1);
       
       // Sort rows by card count (highest first)
       rows.sort((a, b) => {
