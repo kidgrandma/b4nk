@@ -141,57 +141,63 @@
   <div class="grid" id="cardGrid"></div>
   
   <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv";
+    const otherColors = ["#ff00ff", "#00ffff", "#ffff00", "#ff6600", "#66ccff", "#cc66ff", "#ffcc66"];
+
     async function loadData() {
-      const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSCZpsG5unYuljrjEjX0RZdUIDKDhiqGfaMJJ-Rnnn3oVk9RU6qkqlD9YBM8DfiCJ9fxcl3oQW88dRm/pub?output=csv");
-      const csvText = await response.text();
-      const rows = csvText.trim().split("\n").slice(1); // skip header row
+      try {
+        const response = await fetch(SHEET_URL);
+        const csvText = await response.text();
+        const rows = csvText.trim().split("\n").slice(1); // skip header row
       
-      // Sort rows by card count descending (highest first)
-      rows.sort((a, b) => {
-        const cardsA = parseInt(a.split(",")[2]);
-        const cardsB = parseInt(b.split(",")[2]);
-        return cardsB - cardsA;
-      });
+        // Sort rows by card count descending (highest first)
+        rows.sort((a, b) => {
+          const cardsA = parseInt(a.split(",")[2]);
+          const cardsB = parseInt(b.split(",")[2]);
+          return cardsB - cardsA;
+        });
       
-      const grid = document.getElementById("cardGrid");
+        const grid = document.getElementById("cardGrid");
+        grid.innerHTML = ""; // Clear existing grid
       
-      // Predefined colors for non-top-5 players
-      const otherColors = ["#ff00ff", "#00ffff", "#ffff00", "#ff6600", "#66ccff", "#cc66ff", "#ffcc66"];
+        rows.forEach((row, index) => {
+          const columns = row.split(",");
+          const number = columns[1].trim();
+          const cards = columns[2].trim();
       
-      rows.forEach((row, index) => {
-        const columns = row.split(",");
-        const number = columns[1].trim();
-        const cards = columns[2].trim();
-        
-        const card = document.createElement("div");
-        card.className = "card";
-        
-        // Determine glow color:
-        let glowColor;
-        if(index < 5) {
-          glowColor = "#00FF00"; // bright green for top 5
-        } else {
-          glowColor = otherColors[(index - 5) % otherColors.length];
-        }
-        // Set inline styles for border and box shadow (glow)
-        card.style.borderColor = glowColor;
-        card.style.boxShadow = "0 0 20px " + glowColor;
-        
-        const playerNumber = document.createElement("div");
-        playerNumber.className = "player-number";
-        playerNumber.textContent = `Player ${number}`;
-        
-        const cardCount = document.createElement("div");
-        cardCount.className = "card-count";
-        cardCount.textContent = ${cards} cards;
-        
-        card.appendChild(playerNumber);
-        card.appendChild(cardCount);
-        grid.appendChild(card);
-      });
+          const card = document.createElement("div");
+          card.className = "card";
+      
+          // Determine glow color:
+          let glowColor;
+          if (index < 5) {
+            glowColor = "#00FF00"; // bright green for top 5
+          } else {
+            glowColor = otherColors[(index - 5) % otherColors.length];
+          }
+          // Set inline styles for border and box shadow (glow)
+          card.style.borderColor = glowColor;
+          card.style.boxShadow = "0 0 20px " + glowColor;
+      
+          const playerNumber = document.createElement("div");
+          playerNumber.className = "player-number";
+          playerNumber.textContent = `Player ${number}`;
+      
+          const cardCount = document.createElement("div");
+          cardCount.className = "card-count";
+          cardCount.textContent = `${cards} cards`;
+      
+          card.appendChild(playerNumber);
+          card.appendChild(cardCount);
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
     }
     
-    loadData();
+    loadData(); // Initial load
+    setInterval(loadData, 30000); // Refresh every 30 seconds
   </script>
 </body>
 </html>
